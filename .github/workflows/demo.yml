@@ -1,4 +1,4 @@
-name: pushing Docker images to ecr
+name: pushing Docker image to ecr
 on:
   push:
     branches: [ main ]
