@@ -1,11 +1,12 @@
 # File: app.py
+from flask import Flask, render_template, request, redirect, url_for
+import mysql.connector
 import os
 import sys
 print(sys.path)
 
 name = os.getenv('NAME', 'DefaultName')
-from flask import Flask, render_template, request, redirect, url_for
-import mysql.connector
+
 
 app = Flask(__name__)
 
