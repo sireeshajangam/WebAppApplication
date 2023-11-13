@@ -29,7 +29,8 @@ jobs:
           ECR_REPOSITORY: python
           IMAGE_TAG: sample_image
         run: |
-          
+         
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/a4i5r6b0 
           docker build -t python .
           docker tag python:latest public.ecr.aws/a4i5r6b0/python:latest
           #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
