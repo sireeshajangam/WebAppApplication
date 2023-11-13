@@ -1,5 +1,7 @@
 # File: app.py
 import os
+import sys
+print(sys.path)
 
 name = os.getenv('NAME', 'DefaultName')
 from flask import Flask, render_template, request, redirect, url_for
