@@ -31,5 +31,6 @@ jobs:
         run: |
           
           docker build -t python .
+          docker tag python:latest public.ecr.aws/a4i5r6b0/python:latest
           #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push public.ecr.aws/a4i5r6b0/python:latest
