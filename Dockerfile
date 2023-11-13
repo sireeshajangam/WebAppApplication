@@ -11,7 +11,7 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose port 5000 for the Flask app
-EXPOSE 8000
+EXPOSE 5000
 
 # Define environment variable for Flask to run in production mode
 ENV FLASK_ENV=production
