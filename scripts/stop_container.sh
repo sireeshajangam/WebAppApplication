@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
-
-# Stop the running container (if any).
-echo "Hi"
+isExistApp = `pgrep httpd`
+if [[ -n  $isExistApp ]]; then
+    service httpd stop        
+fi
