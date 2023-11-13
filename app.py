@@ -11,7 +11,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'rds-db.cptyiwp2zznq.us-east-1.rds.amazonaws.com',
     'user': 'foo',
-    'password': 'CVLP}3Maq[Ks~g%Hl37B6))9]K)R',
+    'password': 'f6FIVi6p<WYBs&lo2rxgjn|BdJ?c',
     'database': 'mydb',
 }
 
