@@ -9,7 +9,7 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN commandpip install mysql-connector-python==8.0.25
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
