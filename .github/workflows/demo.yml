@@ -29,5 +29,7 @@ jobs:
           ECR_REPOSITORY: python
           IMAGE_TAG: sample_image
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
+          docker build -t python .
+          #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push public.ecr.aws/a4i5r6b0/python:latest
