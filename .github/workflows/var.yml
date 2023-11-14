@@ -1,5 +1,6 @@
-name: Build and Push Docker Images to ECRs
-
+name: Build and Push Docker Images to ECR
+#gg
+#3ss
 on:
   push:
     branches:
