@@ -12,6 +12,21 @@ db_config = {
 }
 
 # Create a 'guestbook' table in MySQL with columns 'id', 'name', 'message', and 'timestamp'
+def create_guestbook_table():
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS guestbook (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.close()
+
+# Ensure the 'guestbook' table exists
+create_guestbook_table()
 
 @app.route('/')
 def index():
