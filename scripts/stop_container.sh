@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the IDs of running containers publishing port 8000
-running_containers=$(sudo docker ps -q --filter "publish=8000")
+running_containers=$(sudo docker ps -q --filter "publish=8000/tcp")
 
 # Output the IDs
 echo "Containers to stop:"
