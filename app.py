@@ -1,19 +1,35 @@
 from flask import Flask, render_template, request, redirect
 import mysql.connector
+import boto3
+import json
+##
 
 app = Flask(__name__)
 
-# Replace these values with your MySQL details
-db_config = {
-    'host': 'rds-db.cptyiwp2zznq.us-east-1.rds.amazonaws.com',
-    'user': 'siri',
-    'password': 'Siri#4830',
-    'database': 'mydb'
+
+# Create a Secrets Manager client
+secrets_manager_client = boto3.client(service_name='secretsmanager', region_name='us-east-1')
+
+# Retrieve the secret values from AWS Secrets Manager
+secret_name = 'DBCredentials'
+get_secret_value_response = secrets_manager_client.get_secret_value(SecretId=secret_name)
+
+# Parse the secret JSON string to obtain key-value pairs
+secret_values = json.loads(get_secret_value_response['SecretString'])
+
+# Database configuration using retrieved secret values
+DATABASES = {
+    'default': {
+        'host': secret_values['MYSQL_DB_HOST']',
+        'database': secret_values['MYSQL_DB_NAME']',
+        'user': secret_values['MYSQL_DB_USER']',
+        'password': secret_values['MYSQL_DB_PASSWORD'],
+    }
 }
 
-# Create a 'guestbook' table in MySQL with columns 'id', 'name', 'message', and 'timestamp'
+# Ensure the 'guestbook' table exists
 def create_guestbook_table():
-    conn = mysql.connector.connect(**db_config)
+    conn = mysql.connector.connect(**DATABASES['default'])
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS guestbook (
@@ -25,7 +41,7 @@ def create_guestbook_table():
     """)
     conn.close()
 
-# Ensure the 'guestbook' table exists
+# Create 'guestbook' table if not exists
 create_guestbook_table()
 
 @app.route('/')
@@ -43,7 +59,7 @@ def add_message():
     return render_template('add_message.html')
 
 def get_messages():
-    conn = mysql.connector.connect(**db_config)
+    conn = mysql.connector.connect(**DATABASES['default'])
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM guestbook ORDER BY timestamp DESC")
     messages = cursor.fetchall()
@@ -51,7 +67,7 @@ def get_messages():
     return messages
 
 def add_message_to_db(name, message_text):
-    conn = mysql.connector.connect(**db_config)
+    conn = mysql.connector.connect(**DATABASES['default'])
     cursor = conn.cursor()
     cursor.execute("INSERT INTO guestbook (name, message) VALUES (%s, %s)", (name, message_text))
     conn.commit()
