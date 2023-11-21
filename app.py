@@ -20,10 +20,10 @@ try:
     # Define the DATABASES dictionary using the retrieved secret values
     DATABASES = {
         'default': {
-            'host': secret_values.get('MYSQL_DB_HOST', ''),
-            'database': secret_values.get('MYSQL_DB_NAME', ''),
-            'user': secret_values.get('MYSQL_DB_USER', ''),
-            'password': secret_values.get('MYSQL_DB_PASSWORD', ''),
+            'host': secret_values.get('host', ''),
+            'database': secret_values.get('dbname', ''),
+            'user': secret_values.get('username', ''),
+            'password': secret_values.get('password', ''),
         }
     }
 
