@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect
 import mysql.connector
 import boto3
+import botocore  # Import botocore for handling exceptions
 import json
-##
 
 app = Flask(__name__)
 
+# Move the variable declaration outside the try block for wider scope
+secrets_manager_client = boto3.client(service_name='secretsmanager', region_name='us-east-1')
 
 try:
     # Retrieve the secret values from AWS Secrets Manager
@@ -32,6 +34,7 @@ except (botocore.exceptions.ClientError, KeyError) as e:
     # Handle exceptions here, log error messages, and take appropriate actions
     print(f"Error fetching secrets: {e}")
     # You might want to set default database credentials or show an error page to users
+
 
 # Ensure the 'guestbook' table exists
 def create_guestbook_table():
