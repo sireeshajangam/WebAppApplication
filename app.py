@@ -20,9 +20,9 @@ secret_values = json.loads(get_secret_value_response['SecretString'])
 # Database configuration using retrieved secret values
 DATABASES = {
     'default': {
-        'host': secret_values['MYSQL_DB_HOST']',
-        'database': secret_values['MYSQL_DB_NAME']',
-        'user': secret_values['MYSQL_DB_USER']',
+        'host': secret_values['MYSQL_DB_HOST'],
+        'database': secret_values['MYSQL_DB_NAME'],
+        'user': secret_values['MYSQL_DB_USER'],
         'password': secret_values['MYSQL_DB_PASSWORD'],
     }
 }
