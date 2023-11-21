@@ -7,25 +7,31 @@ import json
 app = Flask(__name__)
 
 
-# Create a Secrets Manager client
-secrets_manager_client = boto3.client(service_name='secretsmanager', region_name='us-east-1')
+try:
+    # Retrieve the secret values from AWS Secrets Manager
+    secret_name = 'DBCredentials1'
+    get_secret_value_response = secrets_manager_client.get_secret_value(SecretId=secret_name)
 
-# Retrieve the secret values from AWS Secrets Manager
-secret_name = 'DBCredentials'
-get_secret_value_response = secrets_manager_client.get_secret_value(SecretId=secret_name)
+    # Parse the secret JSON string to obtain key-value pairs
+    secret_values = json.loads(get_secret_value_response['SecretString'])
 
-# Parse the secret JSON string to obtain key-value pairs
-secret_values = json.loads(get_secret_value_response['SecretString'])
-
-# Database configuration using retrieved secret values
-DATABASES = {
-    'default': {
-        'host': secret_values['MYSQL_DB_HOST'],
-        'database': secret_values['MYSQL_DB_NAME'],
-        'user': secret_values['MYSQL_DB_USER'],
-        'password': secret_values['MYSQL_DB_PASSWORD'],
+    # Database configuration using retrieved secret values
+    DATABASES = {
+        'default': {
+            'host': secret_values['MYSQL_DB_HOST'],
+            'database': secret_values['MYSQL_DB_NAME'],
+            'user': secret_values['MYSQL_DB_USER'],
+            'password': secret_values['MYSQL_DB_PASSWORD'],
+        }
     }
-}
+
+    # Ensure the 'guestbook' table exists
+    create_guestbook_table()
+
+except (botocore.exceptions.ClientError, KeyError) as e:
+    # Handle exceptions here, log error messages, and take appropriate actions
+    print(f"Error fetching secrets: {e}")
+    # You might want to set default database credentials or show an error page to users
 
 # Ensure the 'guestbook' table exists
 def create_guestbook_table():
