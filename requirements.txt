@@ -1,0 +1,8 @@
+# requirements.txt
+
+# Other dependencies...
+Flask==2.0.1
+Werkzeug==2.0.1
+markupsafe
+mysql-connector-python==8.0.25
+boto3==1.18.57
