@@ -33,7 +33,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
   trigger-pipeline:
-    needs: terraform-deploy
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
