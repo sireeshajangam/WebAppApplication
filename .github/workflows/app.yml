@@ -1,7 +1,8 @@
-name: Terraform-GitHub-Actions
+name: Building and Pushing Image to ECR
 on:
   push:
-    branches: [ main ]
+    branches: 
+        - feature
   
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -12,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkoutgit
         uses: actions/checkout@v3
       - name: Configuring AWS credentials
 
