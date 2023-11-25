@@ -1,73 +1,33 @@
-
-name: Build and Push Docker Image to ECR   
+name: Terraform-GitHub-Actions
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  
 env:
-  TF_VERSION: "1.5.7"
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  ECR_REPO_URL: ${{ secrets.ECR_REPO_URL }}
-
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+  IMAGE_TAG: sample_image
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configuring AWS credentials
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: |
-          cd WebApplication
-          python -m pip install --upgrade pip
-
-      - name: Configure AWS credentials for Docker
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
+         aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
       - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: python-repo
+          IMAGE_TAG: latest
         run: |
-          cd WebApplication
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REPO_URL }}
-          docker build -t python-repo .
-          docker tag python-repo:latest ${{ env.ECR_REPO_URL }}:latest
-          docker push ${{ env.ECR_REPO_URL }}:
-          
-  trigger-pipeline:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS Credentials for CodePipeline
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Trigger CodePipeline
-        run: |
-          aws codepipeline start-pipeline-execution --name GuestAppPipeline
-
-
-
-
-
-        
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
