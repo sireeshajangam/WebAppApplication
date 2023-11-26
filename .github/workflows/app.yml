@@ -1,4 +1,4 @@
-name: Building and Pushing Image to ECR
+name: Building and Pushing Images to ECR
 on:
   push:
     branches: 
@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkoutgit
+      - name: Checkout code
         uses: actions/checkout@v3
       - name: Configuring AWS credentials
 
