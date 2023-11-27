@@ -1,7 +1,5 @@
 #!/bin/bash
 set -e
-
-sleep 200
 # Authenticate Docker with ECR
 /usr/bin/aws ecr get-login-password --region us-east-1 | /usr/bin/docker login --username AWS --password-stdin 571888835380.dkr.ecr.us-east-1.amazonaws.com
 

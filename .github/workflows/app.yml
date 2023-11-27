@@ -1,4 +1,4 @@
-name: Building and Pushing Images to ECR
+name: Building and Pushing Image to ECR
 on:
   push:
     branches: 
