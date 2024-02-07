@@ -1,4 +1,5 @@
-name: Building and Pushing Images to ECR
+name: Building and Pushing Images
+ to ECR
 on:
   push:
     branches: 
@@ -32,21 +33,21 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-  trigger-pipeline:
-    needs: build
-    runs-on: ubuntu-latest
+  # trigger-pipeline:
+  #   needs: build
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials for CodePipeline
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+  #     - name: Configure AWS Credentials for CodePipeline
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ env.AWS_REGION }}
 
-      - name: Trigger CodePipeline
-        run: |
-          aws codepipeline start-pipeline-execution --name GuestAppPipeline
+  #     - name: Trigger CodePipeline
+  #       run: |
+  #         aws codepipeline start-pipeline-execution --name GuestAppPipeline

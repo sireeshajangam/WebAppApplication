@@ -16,3 +16,5 @@ ENV FLASK_ENV=production
 
 # Command to run the application
 CMD ["python", "app.py"]
+
+
